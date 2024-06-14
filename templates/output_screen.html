@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Code</h2>
+<pre>{{ code }}</pre>
+<h2>Output</h2>
+<pre>{{ output }}</pre>
+<a href="{{ url_for('editor.code_screen') }}">Edit Code</a>
+{% endblock %}
