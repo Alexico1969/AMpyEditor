@@ -23,7 +23,7 @@ def load_user(user_id):
 app.register_blueprint(auth_blueprint, url_prefix="/auth")
 app.register_blueprint(editor_blueprint, url_prefix="/editor")
 
-@app.route('/')
+@app.route('/', methods=['GET','POST'])
 def home():
     if current_user.is_authenticated:
         return redirect(url_for('editor.editor'))
