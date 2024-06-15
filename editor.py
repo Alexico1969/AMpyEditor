@@ -28,7 +28,7 @@ def editor():
 
     return render_template('editor.html', code=code, output=output)
 
-@editor_blueprint.route('/input', methods=['POST'])
+@editor_blueprint.route('/input', , methods=['GET', 'POST'])
 @login_required
 def user_input():
     user_input = request.form['user_input']
