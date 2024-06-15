@@ -5,6 +5,42 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <title>Python Editor</title>
+    <script>
+        async function sendCode() {
+            const code = document.getElementById('code').value;
+            const response = await fetch('/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: new URLSearchParams({
+                    'code': code
+                })
+            });
+            const result = await response.text();
+            document.getElementById('output').innerHTML = result;
+        }
+
+        async function sendInput() {
+            const userInput = document.getElementById('user-input').value;
+            const response = await fetch('/input', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: new URLSearchParams({
+                    'user_input': userInput
+                })
+            });
+            const result = await response.json();
+            document.getElementById('output').innerHTML = result.output;
+            document.getElementById('input-section').style.display = 'none';
+        }
+
+        function showInputPrompt() {
+            document.getElementById('input-section').style.display = 'block';
+        }
+    </script>
 </head>
 <body>
     <header>
@@ -14,15 +50,20 @@
         {% endif %}
     </header>
     <main>
-        <form method="post">
-            <textarea name="code" rows="20" cols="100">{{ code }}</textarea>
+        <form onsubmit="sendCode(); return false;">
+            <textarea id="code" name="code" rows="20" cols="100" placeholder="Write your code here...">{{ code }}</textarea>
             <button type="submit">Run</button>
         </form>
-
-        {% if output %}
-        <h2>Output</h2>
-        <pre>{{ output }}</pre>
-        {% endif %}
+        <div id="output">
+            {% if output %}
+            <h2>Output</h2>
+            <pre>{{ output }}</pre>
+            {% endif %}
+        </div>
+        <div id="input-section" style="display: none;">
+            <input id="user-input" type="text" placeholder="Enter input">
+            <button onclick="sendInput()">Submit</button>
+        </div>
     </main>
 </body>
 </html>
