@@ -1,5 +1,7 @@
 from flask import Blueprint, render_template, request
 from flask_login import login_required, current_user
+import io
+import contextlib
 
 editor_blueprint = Blueprint('editor', __name__)
 
@@ -11,11 +13,10 @@ def editor():
     if request.method == 'POST':
         code = request.form['code']
         try:
-            # Execute the code safely
-            exec_globals = {}
-            exec_locals = {}
-            exec(code, exec_globals, exec_locals)
-            output = exec_locals.get('result', 'Code executed successfully.')
+            # Capture the output of the code
+            with io.StringIO() as buf, contextlib.redirect_stdout(buf):
+                exec(code)
+                output = buf.getvalue()
         except Exception as e:
             output = str(e)
 
