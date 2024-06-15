@@ -26,10 +26,8 @@ app.register_blueprint(editor_blueprint, url_prefix="/editor")
 @app.route('/')
 def home():
     if current_user.is_authenticated:
-        return redirect(url_for('editor.code_screen'))
+        return redirect(url_for('editor.editor'))
     return redirect(url_for('auth.login'))
-
-
 
 
 
