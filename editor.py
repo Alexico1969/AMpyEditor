@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request
+from flask import Blueprint, render_template, request, jsonify
 from flask_login import login_required, current_user
 import io
 import contextlib
@@ -28,14 +28,14 @@ def editor():
 
     return render_template('editor.html', code=code, output=output)
 
-@editor_blueprint.route('/input', methods=['GET', 'POST'])
+@editor_blueprint.route('/input', methods=['POST'])
 @login_required
 def user_input():
     user_input = request.form['user_input']
     execution_context['input_value'] = user_input
     execution_context['input_needed'] = False
     try:
-        execute_code(execution_context['remaining_code'])
+        execute_code('\n'.join(execution_context['remaining_code']))
         output = execution_context['output']
     except Exception as e:
         output = str(e)
@@ -51,7 +51,7 @@ def execute_code(code):
         try:
             exec(code, execution_context['exec_globals'])
         except InputNeededException:
-            execution_context['remaining_code'] = code.splitlines()[1:]
+            execution_context['remaining_code'] = code.splitlines()
             execution_context['output'] += buf.getvalue()
             raise
         execution_context['output'] += buf.getvalue()
