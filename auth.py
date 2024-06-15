@@ -52,7 +52,7 @@ def authorize():
     print(user_info)
     user = User.get_or_create(user_info)
     login_user(user)
-    return redirect(url_for('editor.code_screen'))
+    return redirect(url_for('editor.editor'))
 
 @auth_blueprint.route('/logout')
 def logout():
