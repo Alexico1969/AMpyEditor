@@ -2,6 +2,7 @@ from flask import Blueprint, redirect, url_for, session
 from authlib.integrations.flask_client import OAuth
 from flask_login import LoginManager, login_user, logout_user
 from user import User
+import requests
 
 import os
 from dotenv import load_dotenv
@@ -19,6 +20,10 @@ class Config:
 
 def init_oauth(app):
     oauth.init_app(app)
+
+    # Fetch the OpenID Connect discovery document
+    discovery_doc = requests.get('https://accounts.google.com/.well-known/openid-configuration').json()
+
     oauth.register(
         name='google',
         client_id=app.config['GOOGLE_CLIENT_ID'],
@@ -29,6 +34,7 @@ def init_oauth(app):
         access_token_params=None,
         refresh_token_url=None,
         client_kwargs={'scope': 'openid profile email'},
+        jwks_uri=discovery_doc['jwks_uri'],  # Manually set the jwks_uri
     )
 
 @auth_blueprint.route('/login')
