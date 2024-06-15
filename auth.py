@@ -48,8 +48,10 @@ def authorize():
     google = oauth.create_client('google')
     token = google.authorize_access_token()
     user_info = google.parse_id_token(token)
+    
     # Debugging: print user_info to see what data is returned
     print(user_info)
+    
     user = User.get_or_create(user_info)
     login_user(user)
     return redirect(url_for('editor.editor'))

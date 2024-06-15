@@ -1,8 +1,10 @@
-from flask import Blueprint, render_template, request, redirect, url_for
+from flask import Blueprint, render_template, request
 from flask_login import login_required, current_user
 
 editor_blueprint = Blueprint('editor', __name__)
 
+@editor_blueprint.route('/', methods=['GET', 'POST'])
+@login_required
 def editor():
     code = ""
     output = None
