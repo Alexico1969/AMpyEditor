@@ -29,5 +29,9 @@ def home():
         return redirect(url_for('editor.code_screen'))
     return redirect(url_for('auth.login'))
 
+
+
+
+
 if __name__ == '__main__':
     app.run(debug=True)

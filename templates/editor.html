@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <title>Python Editor</title>
+</head>
+<body>
+    <header>
+        <h1>Python Editor</h1>
+        {% if current_user.is_authenticated %}
+        <a href="{{ url_for('auth.logout') }}">Logout</a>
+        {% endif %}
+    </header>
+    <main>
+        <form method="post">
+            <textarea name="code" rows="20" cols="100">{{ code }}</textarea>
+            <button type="submit">Run</button>
+        </form>
+
+        {% if output %}
+        <h2>Output</h2>
+        <pre>{{ output }}</pre>
+        {% endif %}
+    </main>
+</body>
+</html>
