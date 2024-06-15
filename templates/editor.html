@@ -6,7 +6,8 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <title>Python Editor</title>
     <script>
-        async function sendCode() {
+        async function sendCode(event) {
+            event.preventDefault();
             const code = document.getElementById('code').value;
             const response = await fetch('/', {
                 method: 'POST',
@@ -19,6 +20,9 @@
             });
             const result = await response.text();
             document.getElementById('output').innerHTML = result;
+            if (result.includes('Enter input')) {
+                showInputPrompt();
+            }
         }
 
         async function sendInput() {
@@ -50,7 +54,7 @@
         {% endif %}
     </header>
     <main>
-        <form onsubmit="sendCode(); return false;">
+        <form onsubmit="sendCode(event)">
             <textarea id="code" name="code" rows="20" cols="100" placeholder="Write your code here...">{{ code }}</textarea>
             <button type="submit">Run</button>
         </form>

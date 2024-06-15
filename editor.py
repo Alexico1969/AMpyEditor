@@ -35,7 +35,7 @@ def user_input():
     execution_context['input_value'] = user_input
     execution_context['input_needed'] = False
     try:
-        execute_code('\n'.join(execution_context['remaining_code']))
+        execute_code("\n".join(execution_context['remaining_code']))
         output = execution_context['output']
     except Exception as e:
         output = str(e)
@@ -51,7 +51,7 @@ def execute_code(code):
         try:
             exec(code, execution_context['exec_globals'])
         except InputNeededException:
-            execution_context['remaining_code'] = code.splitlines()
+            execution_context['remaining_code'] = code.splitlines()[1:]
             execution_context['output'] += buf.getvalue()
             raise
         execution_context['output'] += buf.getvalue()
